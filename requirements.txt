@@ -6,3 +6,5 @@ langchain-community
 langchain_huggingface
 langchain-groq
 streamlit
+SQLAlchemy
+mysql-connector-python
