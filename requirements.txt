@@ -1,0 +1,7 @@
+ipykernel
+langchain 
+arxiv
+wikipedia
+langchain-community
+langchain_huggingface
+langchain-groq

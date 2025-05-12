@@ -1,0 +1,15 @@
+[project]
+name = "chat-with-sql-db"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "arxiv>=2.2.0",
+    "ipykernel>=6.29.5",
+    "langchain>=0.3.25",
+    "langchain-community>=0.3.23",
+    "langchain-groq>=0.3.2",
+    "langchain-huggingface>=0.2.0",
+    "wikipedia>=1.4.0",
+]
