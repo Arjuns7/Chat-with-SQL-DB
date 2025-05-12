@@ -8,6 +8,11 @@ from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from sqlalchemy import create_engine
 import sqlite3
 from langchain_groq import ChatGroq
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+groq_api_key = os.getenv('GROQ_API_KEY')
 
 st.set_page_config(page_title="Langchain: Chat with SQL DB", page_icon="🦜")
 st.title("🦜 Langchain Chat with SQL DB")
@@ -28,3 +33,35 @@ if radio_output.index(selected_opt)==1:
 
 else:
     db_uri=LOCALDB
+
+api_key = st.sidebar.text_input(label="GROQ API KEY",type="password")
+
+if not db_uri:
+    st.info("Please enter the database info and uri")
+
+if not api_key:
+    st.info("please add the GROQ api key")
+
+llm = ChatGroq(api_key=groq_api_key, model_name="Llama-8b-8192",streaming=True)
+
+@st.cache_resource(ttl="2h")
+def configure_db(db_uri,mysql_host=None,mysql_user=None,mysql_password=None,mysql_db=None)
+    if db_uri==LOCALDB:
+        dbfilepath = (Path(__file__).parent/"student.db")
+        print(dbfilepath)
+        creator = lambda:sqlite3.connect(f"file:{dbfilepath}?mode=ro",uri=True)
+        return SQLDatabase(create_engine("sqllite:///",creator=creator))
+    
+    elif db_uri==MYSQL:
+        if not (mysql_host and mysql_user and mysql_password and mysql_db):
+            st.error("Please provide all MYSQL connection details")
+            st.stop()
+        
+        return SQLDatabase(create_engine(f"mysql+mysqlconnector://{mysql_user}:{mysql_password}@{mysql_host}/{mysql_db}"))
+
+if db_uri==MYSQL:
+    db= configure_db(db_uri,mysql_host,mysql_user,mysql_password,mysql_db)
+else:
+    db = configure_db(db_uri)
+
+
